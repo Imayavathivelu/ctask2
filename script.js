@@ -1,51 +1,40 @@
-document.addEventListener("DOMContentLoaded", loadExpenses);
+document.getElementById('login-button').addEventListener('click', loginUser);
 
-const expenseForm = document.getElementById("expense-form");
-const expenseList = document.getElementById("expense-list");
-
-let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
-
-expenseForm.addEventListener("submit", addExpense);
-
-function loadExpenses() {
-    expenses.forEach(expense => displayExpense(expense));
+function loginUser() {
+    // Placeholder for login functionality
+    // In a real app, you'd handle OAuth and API authentication here
+    alert("This is a placeholder for the login functionality.");
+    fetchFeeds();
 }
 
-function addExpense(e) {
-    e.preventDefault();
+function fetchFeeds() {
+    // Simulated feed data
+    const feeds = [
+        {
+            platform: 'Twitter',
+            content: 'This is a tweet from Twitter.'
+        },
+        {
+            platform: 'Facebook',
+            content: 'This is a post from Facebook.'
+        },
+        {
+            platform: 'Instagram',
+            content: 'This is an image from Instagram.'
+        }
+    ];
     
-    const name = document.getElementById("expense-name").value;
-    const amount = document.getElementById("expense-amount").value;
-
-    const expense = { id: Date.now(), name, amount };
-    expenses.push(expense);
-    localStorage.setItem("expenses", JSON.stringify(expenses));
-    
-    displayExpense(expense);
-    expenseForm.reset();
+    displayFeeds(feeds);
 }
 
-function displayExpense(expense) {
-    const li = document.createElement("li");
-    li.setAttribute("data-id", expense.id);
-    li.innerHTML = `
-        ${expense.name} - $${expense.amount}
-        <button class="edit-btn" onclick="editExpense(${expense.id})">Edit</button>
-        <button class="delete-btn" onclick="deleteExpense(${expense.id})">Delete</button>
-    `;
-    expenseList.appendChild(li);
-}
+function displayFeeds(feeds) {
+    const contentDiv = document.getElementById('content');
+    contentDiv.innerHTML = ''; // Clear previous content
 
-function editExpense(id) {
-    const expense = expenses.find(exp => exp.id === id);
-    document.getElementById("expense-name").value = expense.name;
-    document.getElementById("expense-amount").value = expense.amount;
-
-    deleteExpense(id);
-}
-
-function deleteExpense(id) {
-    expenses = expenses.filter(exp => exp.id !== id);
-    localStorage.setItem("expenses", JSON.stringify(expenses));
-    document.querySelector(`[data-id='${id}']`).remove();
+    feeds.forEach(feed => {
+        const feedItem = document.createElement('div');
+        feedItem.className = 'feed-item';
+        feedItem.innerHTML = `<strong>${feed.platform}</strong>: ${feed.content}`;
+        contentDiv.appendChild(feedItem);
+    });
 }
